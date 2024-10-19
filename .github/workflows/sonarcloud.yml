@@ -1,40 +1,48 @@
-name: SonarCloud Scan
+name: SonarQube analysis
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "master" ]
   pull_request:
-    branches:
-      - main
-
+    branches: [ "master" ]
+  
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          java-version: '11'
+          node-version: '18'  # Adjust to your Node.js version
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar-cache
-          restore-keys: |
-            ${{ runner.os }}-sonar-cache
+      # Step 3: Install project dependencies
+      - name: Install Dependencies
+        run: npm install
 
-      - name: SonarCloud Scan
+      # Step 4: Optional: Run tests and generate coverage report
+      # Uncomment if you want to run tests
+      # - name: Run Tests and Generate Coverage
+      #   run: npm test -- --coverage  # Ensure your test command generates coverage
+
+      # Step 5: Install SonarScanner CLI
+      - name: Install SonarScanner CLI
+        run: npm install -g sonarqube-scanner@latest  # Install the latest version
+
+      # Step 6: Run SonarCloud Scan
+      - name: Run SonarCloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Ensure SONAR_TOKEN is set in GitHub Secrets
         run: |
-          mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=my_project_key \
-            -Dsonar.organization=my_organization \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN
+          npm run build  # Run your build command if your project needs it
+          npx sonar-scanner -X \  # Enable debug logging
+            -Dsonar.projectKey=web-shoharab-pk_react-js-advance-folder-structure \  # Project key
+            -Dsonar.organization=web-shoharab-pk \  # Organization key
+            -Dsonar.sources=src \  # Adjust if your source directory is different
+            -Dsonar.host.url=https://sonarcloud.io \  # SonarCloud URL
+            -Dsonar.login=$SONAR_TOKEN  # Sonar token for authentication
