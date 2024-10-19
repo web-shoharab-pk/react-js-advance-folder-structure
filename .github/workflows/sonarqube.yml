@@ -37,25 +37,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '18'  # Adjust to your Node.js version
 
+      # Step 3: Install project dependencies
       - name: Install Dependencies
         run: npm install
 
+      # Step 4: Run tests and generate coverage report (optional)
+      - name: Run Tests and Generate Coverage
+        run: npm test -- --coverage  # Ensure your test command generates coverage
+
+      # Step 5: Install SonarScanner CLI
+      - name: Install SonarScanner CLI
+        run: npm install -g sonarqube-scanner@latest  # Install the latest version
+
+      # Step 6: Run SonarCloud Scan
       - name: Run SonarCloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Ensure SONAR_TOKEN is set in GitHub Secrets
         run: |
-          npm run build  # Run your build command if needed, or skip this if it's not required.
+          npm run build  # Run your build command if your project needs it
           npx sonar-scanner -X \  # Enable debug logging
-            -Dsonar.projectKey=my_project_key \
-            -Dsonar.organization=my_organization \
-            -Dsonar.sources=src \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.projectKey=my_project_key \  # Replace with your project key
+            -Dsonar.organization=my_organization \  # Replace with your organization
+            -Dsonar.sources=src \  # Source directory
+            -Dsonar.host.url=https://sonarcloud.io \  # SonarCloud URL
+            -Dsonar.login=$SONAR_TOKEN  # Sonar token for authentication
