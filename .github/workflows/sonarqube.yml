@@ -66,8 +66,8 @@ jobs:
         run: |
           npm run build  # Run your build command if your project needs it
           npx sonar-scanner -X \  # Enable debug logging
-            -Dsonar.projectKey=my_project_key \  # Replace with your project key
-            -Dsonar.organization=my_organization \  # Replace with your organization
+            -Dsonar.projectKey=web-shoharab-pk_react-js-advance-folder-structure \  # Replace with your project key
+            -Dsonar.organization=web-shoharab-pk \  # Replace with your organization
             -Dsonar.sources=src \  # Source directory
             -Dsonar.host.url=https://sonarcloud.io \  # SonarCloud URL
             -Dsonar.login=$SONAR_TOKEN  # Sonar token for authentication
