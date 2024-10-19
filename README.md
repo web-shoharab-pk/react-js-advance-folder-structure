@@ -1,4 +1,4 @@
-# React JS Advance-Level Folder Structure
+# React JS Advance-Level Folder Structure with sonar
 
 How to run the project
 ```javascript
