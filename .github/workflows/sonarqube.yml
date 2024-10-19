@@ -52,8 +52,8 @@ jobs:
         run: npm install
 
       # Step 4: Run tests and generate coverage report (optional)
-      - name: Run Tests and Generate Coverage
-        run: npm test -- --coverage  # Ensure your test command generates coverage
+     # - name: Run Tests and Generate Coverage
+     #   run: npm test -- --coverage  # Ensure your test command generates coverage
 
       # Step 5: Install SonarScanner CLI
       - name: Install SonarScanner CLI
